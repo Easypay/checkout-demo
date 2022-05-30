@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>easypay Checkout Demo</title>
+  </head>
+  <body>
+    <div id="easypay-checkout"></div>
+    <!-- TODO: include from CDN -->
+    <script src="/files/bundle.js"></script>
+    <script>
+
+      /** Used to store the checkout instance and later unmount it. */
+      let checkoutInstance
+
+      /** The code we want to run on Checkout Messages. */
+      function onCheckoutMessage(checkoutMessage) {
+        if (checkoutMessage === 'complete') {
+          checkoutInstance.unmount()
+          document.write('Checkout session complete. Thank you.')
+        }
+      }
+
+      /**
+       * Call the Checkout SDK with manifest and options.
+       * In this case, we are using the default id 'easypay-checkout' and passing an 'onMessage' handler.
+       */
+      function initEasypayCheckoutSDK(manifest) {
+        checkoutInstance = easypayCheckout.startCheckout(manifest, {
+          onMessage: onCheckoutMessage
+        })
+      }
+
+      /**
+       * Gets a Checkout Manifest by using the server-side APIs
+       * and initializes the easypay Checkout SDK with it.
+       * @see app.js for the server-side request.
+       */
+      function getCheckoutManifest() {
+        const req = new XMLHttpRequest();
+        req.onreadystatechange = (e) => {
+          if (req.readyState === XMLHttpRequest.DONE) {
+            if (req.status === 200) {
+              const manifest = JSON.parse(req.responseText)
+              initEasypayCheckoutSDK(manifest)
+            } else {
+              console.error(`Error ${req.status} ${req.statusText}`, req.responseText)
+            }
+          }
+        }
+        const url='/checkoutmanifest';
+        req.open("GET", url);
+        req.send();
+      }
+
+      getCheckoutManifest()
+    </script>
+  </body>
+</html>
