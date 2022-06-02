@@ -9,11 +9,20 @@ const port = 3000
 
 // TODO: remove after inclusion from CDN
 app.use('/files', express.static(path.join(__dirname, 'files')))
+app.use('/images', express.static(path.join(__dirname, 'images')))
 
 app.get('/checkoutmanifest', createCheckoutSession)
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'))
+})
+
+app.get('/popup', (req, res) => {
+  res.sendFile(path.join(__dirname, 'popup.html'))
+})
+
+app.get('/inline', (req, res) => {
+  res.sendFile(path.join(__dirname, 'inline.html'))
 })
 
 app.listen(port, () => {
@@ -35,22 +44,14 @@ function createCheckoutSession(req, res) {
   const payload = JSON.stringify({
     type: ['single'],
     payment: {
-      methods: [
-        'cc',
-        'mb',
-        'mbw',
-        'dd',
-        'vi',
-        'uf',
-        'sc',
-      ],
-      "type": "sale",
-      "capture": {
-        "transaction_key": "string",
-        "descriptive": "Descriptive Example"
+      methods: ['cc', 'mb', 'mbw', 'dd', 'vi', 'uf', 'sc'],
+      type: 'sale',
+      capture: {
+        transaction_key: 'string',
+        descriptive: 'Descriptive Example',
       },
-      "currency": "EUR",
-      "expiration_time": tomorrow.toISOString().slice(0, 16).replace('T', ' ') // e.g. 2022-01-02 18:25
+      currency: 'EUR',
+      expiration_time: tomorrow.toISOString().slice(0, 16).replace('T', ' '), // e.g. 2022-01-02 18:25
     },
     order: {
       value: 302,
@@ -60,26 +61,26 @@ function createCheckoutSession(req, res) {
           description: 'Item in cart',
           quantity: 1,
           key: 'product-1',
-          value: 150
+          value: 150,
         },
         {
           description: 'Item 2 in cart',
           quantity: 1,
           key: 'product-2',
-          value: 152
+          value: 152,
         },
-      ]
+      ],
     },
-    config: null,
+    config: {},
     customer: {
-      "name": "Customer Example",
-      "email": "customer@example.com",
-      "phone": "911234567",
-      "phone_indicative": "+351",
-      "fiscal_number": "PT123456789",
-      "key": "Key Example",
-      "language": "PT"
-    }
+      name: 'Customer Example',
+      email: 'customer@example.com',
+      phone: '911234567',
+      phone_indicative: '+351',
+      fiscal_number: 'PT123456789',
+      key: 'Key Example',
+      language: 'PT',
+    },
   })
   const options = {
     hostname: host,
@@ -88,20 +89,20 @@ function createCheckoutSession(req, res) {
     headers: {
       'Content-Type': 'application/json',
       'Content-Length': payload.length,
-      'AccountId': accountId,
-      'ApiKey': apiKey
-    }
+      AccountId: accountId,
+      ApiKey: apiKey,
+    },
   }
   var httpreq = https.request(options, function (response) {
     let manifest = ''
     response.on('data', function (chunk) {
       manifest += chunk
-    });
-    response.on('end', function() {
-      console.log('received: ', manifest)
-      res.send(manifest);
     })
-  });
+    response.on('end', function () {
+      console.log('received: ', manifest)
+      res.send(manifest)
+    })
+  })
   httpreq.write(payload)
   httpreq.end()
 }

@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>easypay Checkout Demo</title>
+  </head>
+  <body>
+    <button id="easypay-checkout">Open Popup</button>
+    <!-- include from CDN -->
+    <script src="/files/bundle.js"></script>
+    <script>
+      /** Used to store the checkout instance and later unmount it. */
+      let checkoutInstance
+      let manifest
+
+      /** The code we want to run when Checkout finishes successfully. */
+      function onCheckoutSuccess(checkoutMessage) {
+        checkoutInstance.unmount()
+        if (paymentInfo.paid) {
+          document.write('Your payment was received. Thank you.')
+        } else {
+          document.write('Your order was received and is now awaiting payment. Thank you.')
+        }
+      }
+
+      /** The code we want to run on Checkout errors. */
+      function onCheckoutError(error) {
+        checkoutInstance.unmount()
+        switch (error.code) {
+          case 'checkout-expired':
+            getCheckoutManifest()
+            break
+          case 'already-paid':
+            document.write('Your order was already paid. Thank you.')
+            break
+          default:
+            document.write('Unable to process payment, please try again.')
+        }
+      }
+
+      /** The code we want to run on Checkout Close. */
+      function onCheckoutClose() {
+        checkoutInstance.unmount()
+        alert('Popup closed.')
+      }
+
+      /**
+       * Call the Checkout SDK with manifest and options.
+       * In this case, we are using the default id 'easypay-checkout', we are passing a 'display' option to enable 'popup' mode and our event handlers.
+       */
+      function initEasypayCheckoutSDK(manifest) {
+        checkoutInstance = easypayCheckout.startCheckout(manifest, {
+          onSuccess: onCheckoutSuccess,
+          onError: onCheckoutError,
+          onClose: onCheckoutClose,
+          hideDetails: true,
+          display: 'popup',
+        })
+      }
+
+      /**
+       * Gets a Checkout Manifest by using the server-side APIs
+       * and initializes the easypay Checkout SDK with it.
+       * @see app.js for the server-side request.
+       */
+      function getCheckoutManifest() {
+        const req = new XMLHttpRequest()
+        req.onreadystatechange = (e) => {
+          if (req.readyState === XMLHttpRequest.DONE) {
+            if (req.status === 200) {
+              manifest = JSON.parse(req.responseText)
+              initEasypayCheckoutSDK(manifest)
+            } else {
+              console.error(`Error ${req.status} ${req.statusText}`, req.responseText)
+            }
+          }
+        }
+        const url = '/checkoutmanifest'
+        req.open('GET', url)
+        req.send()
+      }
+
+      getCheckoutManifest()
+    </script>
+  </body>
+</html>
