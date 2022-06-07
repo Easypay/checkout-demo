@@ -12,21 +12,39 @@
       /** Used to store the checkout instance and later unmount it. */
       let checkoutInstance
 
-      /** The code we want to run on Checkout Messages. */
-      function onCheckoutMessage(checkoutMessage) {
-        if (checkoutMessage === 'complete') {
-          checkoutInstance.unmount()
-          document.write('Checkout session complete. Thank you.')
+      /** The code we want to run when Checkout finishes successfully. */
+      function onCheckoutSuccess(paymentInfo) {
+        checkoutInstance.unmount()
+        if (paymentInfo.paid) {
+          document.write('Your payment was received. Thank you.')
+        } else {
+          document.write('Your order was received and is now awaiting payment. Thank you.')
+        }
+      }
+
+      /** The code we want to run on Checkout errors. */
+      function onCheckoutError(error) {
+        checkoutInstance.unmount()
+        switch (error.code) {
+          case 'checkout-expired':
+            getCheckoutManifest()
+            break
+          case 'already-paid':
+            document.write('Your order was already paid. Thank you.')
+            break
+          default:
+            document.write('Unable to process payment, please try again.')
         }
       }
 
       /**
        * Call the Checkout SDK with manifest and options.
-       * In this case, we are using the default id 'easypay-checkout' and passing an 'onMessage' handler.
+       * In this case, we are using the default id 'easypay-checkout' and passing our event handlers.
        */
       function initEasypayCheckoutSDK(manifest) {
         checkoutInstance = easypayCheckout.startCheckout(manifest, {
-          onMessage: onCheckoutMessage
+          onSuccess: onCheckoutSuccess,
+          onError: onCheckoutError,
         })
       }
 

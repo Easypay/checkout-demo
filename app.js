@@ -53,20 +53,20 @@ function createCheckoutSession(req, res) {
       "expiration_time": tomorrow.toISOString().slice(0, 16).replace('T', ' ') // e.g. 2022-01-02 18:25
     },
     order: {
-      value: 2,
+      value: 302,
       key: 'order-key',
       items: [
         {
           description: 'Item in cart',
           quantity: 1,
           key: 'product-1',
-          value: 1
+          value: 150
         },
         {
           description: 'Item 2 in cart',
           quantity: 1,
           key: 'product-2',
-          value: 1
+          value: 152
         },
       ]
     },

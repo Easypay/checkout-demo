@@ -20,7 +20,8 @@
      */
     var defaultOptions = {
         id: 'easypay-checkout',
-        onMessage: function () { },
+        onSuccess: function () { },
+        onError: function () { },
         testing: false,
     };
     /**
@@ -48,7 +49,7 @@
             window.addEventListener('message', this.messageHandler);
             var iframe = document.createElement('iframe');
             iframe.setAttribute('src', "".concat(this.originUrl, "?manifest=").concat(this.encodeManifest(manifest)));
-            // Using the attributes below in order to provide defaults without overriding CSS styles
+            // Using the attributes below in order to provide defaults without overriding CSS styles.
             iframe.setAttribute('width', '400');
             iframe.setAttribute('height', '700');
             iframe.setAttribute('frameborder', '0');
@@ -71,8 +72,12 @@
                 console.error("".concat(CheckoutInstance.LOGTAG, " Could not find element ").concat(options.id, "."));
                 return false;
             }
-            if (typeof options.onMessage !== 'function') {
-                console.error("".concat(CheckoutInstance.LOGTAG, " The onMessage callback must be a function."));
+            if (typeof options.onSuccess !== 'function') {
+                console.error("".concat(CheckoutInstance.LOGTAG, " The onSuccess callback must be a function."));
+                return false;
+            }
+            if (typeof options.onError !== 'function') {
+                console.error("".concat(CheckoutInstance.LOGTAG, " The onError callback must be a function."));
                 return false;
             }
             if (typeof options.testing !== 'boolean') {
@@ -94,17 +99,20 @@
         };
         /**
          * Handles messages sent from the Checkout iframe. If the origin and contents are as expected,
-         * pass them on to the message handler that was configured in startCheckout.
+         * pass them on to the event handlers that were configured in startCheckout.
          *
          * If the Checkout becomes completed, automatically removes the event listener.
          */
         CheckoutInstance.prototype.handleMessage = function (e) {
             if (e.origin === this.originUrl && e.data.type === 'ep-checkout') {
-                this.options.onMessage(e.data.status);
-                if (e.data.status === 'complete') {
+                if (e.data.status === 'success') {
+                    this.options.onSuccess(e.data.payment);
                     if (this.messageHandler) {
                         window.removeEventListener('message', this.messageHandler);
                     }
+                }
+                else if (e.data.status === 'error') {
+                    this.options.onError(e.data.error);
                 }
             }
         };
@@ -121,8 +129,8 @@
                 child.remove();
             });
         };
-        CheckoutInstance.PROD_URL = 'https://checkout-serverless.quality-utility.aws.easypay.pt';
-        CheckoutInstance.TEST_URL = 'https://checkout-serverless.sandbox.easypay.pt';
+        CheckoutInstance.PROD_URL = 'https://pay.easypay.pt';
+        CheckoutInstance.TEST_URL = 'https://pay.sandbox.easypay.pt';
         CheckoutInstance.LOGTAG = '[easypay Checkout SDK]';
         return CheckoutInstance;
     }());
