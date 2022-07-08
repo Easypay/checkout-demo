@@ -1,7 +1,8 @@
 # Easypay Checkout Demo
 
-To install dependencies: `yarn install`
+A [live version](https://checkout-demo.easypay.pt/) of this application is available.
 
-To run: `yarn dev`
+To test locally:
 
-To try it out: `yarn dev` (access http://localhost:3000)
+1. Install dependencies with `yarn install`
+2. Run with `yarn dev` (access http://localhost:3000)
