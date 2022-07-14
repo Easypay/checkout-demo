@@ -52,7 +52,7 @@
           onSuccess: onCheckoutSuccess,
           onError: onCheckoutError,
           onClose: onCheckoutClose,
-          hideDetails: true,
+          hideDetails: sessionStorage.getItem('hideDetails') === 'true' ? true : false,
           display: 'popup',
           testing: true
         })

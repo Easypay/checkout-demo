@@ -46,7 +46,7 @@
           onSuccess: onCheckoutSuccess,
           onError: onCheckoutError,
           language: 'en',
-          hideDetails: true,
+          hideDetails: sessionStorage.getItem('hideDetails') === 'true' ? true : false,
           testing: true
         })
       }

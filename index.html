@@ -7,23 +7,54 @@
   </head>
   <body>
     <h1>easypay Checkout SDK Demo</h1>
+    <div class="options">
+      <div class="option">
+        <label for="switch">Hide details:</label>
+        <div id="switch" class="switch" onclick="hideDetails(this)">
+          <input type="checkbox" />
+          <span class="slider round"></span>
+        </div>
+      </div>
+    </div>
     <div class="container">
       <div class="container-box">
         <h3>Inline Checkout Demo:</h3>
-        <a href="inline"><img src="images/inline.png" height="400" /></a>
+        <a href="inline"><img id="inlineImg" src="images/inline.png" height="400" /></a>
         <br />
         <div class="links"><a href="inline">Inline &rarr;</a></div>
       </div>
       <hr />
       <div class="container-box">
         <h3>Popup Checkout Demo:</h3>
-        <a href="popup"><img src="images/popupmode.png" height="400" /></a>
+        <a href="popup"><img id="popupImg" src="images/popup.png" height="400" /></a>
         <br />
         <div class="links"><a href="popup">Popup &rarr;</a></div>
       </div>
     </div>
   </body>
 </html>
+<script>
+  function hideDetails(event) {
+    if (sessionStorage.getItem("hideDetails") === "true") {
+      sessionStorage.setItem("hideDetails", "false")
+      event.children[0].checked = false
+      changeImg("inline", "inlineImg")
+      changeImg("popup", "popupImg")
+    } else {
+      sessionStorage.setItem("hideDetails", "true")
+      event.children[0].checked = true
+      changeImg("inline_details", "inlineImg")
+      changeImg("popup_details", "popupImg")
+    }
+  }
+
+  function changeImg(name, elemId) {
+    let imgElem = document.getElementById(elemId)
+    const src = new URL(imgElem.src)
+    src.pathname = `/images/${name}.png`
+    imgElem.src = src
+  }
+</script>
 <style>
   * {
     font-family: 'Overpass', sans-serif;
@@ -56,5 +87,66 @@
   }
   .links {
     margin: 20px;
+  }
+  .options {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    border: 0.5px solid #dadada;
+    padding: 20px 20px;
+  }
+  .option > * {
+    vertical-align: middle;
+  }
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+  }
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+  input:checked + .slider {
+    background-color: #0d71f9;
+  }
+  input:focus + .slider {
+    box-shadow: 0 0 1px #0d71f9;
+  }
+  input:checked + .slider:before {
+    -webkit-transform: translateX(20px);
+    -ms-transform: translateX(20px);
+    transform: translateX(20px);
+  }
+  .slider.round {
+    border-radius: 34px;
+  }
+  .slider.round:before {
+    border-radius: 50%;
   }
 </style>
