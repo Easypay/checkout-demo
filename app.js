@@ -8,7 +8,6 @@ const app = express()
 const port = 3000
 
 // TODO: remove after inclusion from CDN
-app.use('/files', express.static(path.join(__dirname, 'files')))
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
 app.get('/checkoutmanifest', createCheckoutSession)

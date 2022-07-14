@@ -47,6 +47,7 @@
           onError: onCheckoutError,
           language: 'en',
           hideDetails: sessionStorage.getItem('hideDetails') === 'true' ? true : false,
+          logoUrl: sessionStorage.getItem("logoUrl") === 'true' ? 'https://easypay-cdn-delivery.s3.eu-central-1.amazonaws.com/emails/easypay_logo.svg' : '',
           testing: true
         })
       }
