@@ -13,13 +13,9 @@
       let manifest
 
       /** The code we want to run when Checkout finishes successfully. */
-      function onCheckoutSuccess(paymentInfo) {
+      function onCheckoutSuccess(successInfo) {
         checkoutInstance.unmount()
-        if (paymentInfo.paid) {
-          document.write('Your payment was received. Thank you.')
-        } else {
-          document.write('Your order was received and is now awaiting payment. Thank you.')
-        }
+        document.write('Your order was received. Thank you.')
       }
 
       /** The code we want to run on Checkout errors. */
