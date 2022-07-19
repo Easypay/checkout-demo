@@ -9,9 +9,16 @@
     <h1>easypay Checkout SDK Demo</h1>
     <div class="options">
       <div class="option">
-        <label for="switch">Hide details:</label>
-        <div id="switch" class="switch" onclick="hideDetails(this)">
-          <input type="checkbox" />
+        <label for="switch">Hide details</label>
+        <div id="switch" class="switch" onclick="hideDetails()">
+          <input type="checkbox" id="detailsCheckbox" />
+          <span class="slider round"></span>
+        </div>
+      </div>
+      <div class="option">
+        <label for="switch">Logo URL</label>
+        <div id="switch" class="switch" onclick="addLogoUrl()">
+          <input type="checkbox" id="logoCheckbox" />
           <span class="slider round"></span>
         </div>
       </div>
@@ -34,26 +41,56 @@
   </body>
 </html>
 <script>
+  (function () {
+    updateImgAndSlide()
+  })()
+
   function hideDetails(event) {
     if (sessionStorage.getItem("hideDetails") === "true") {
       sessionStorage.setItem("hideDetails", "false")
-      event.children[0].checked = false
-      changeImg("inline", "inlineImg")
-      changeImg("popup", "popupImg")
     } else {
       sessionStorage.setItem("hideDetails", "true")
-      event.children[0].checked = true
-      changeImg("inline_details", "inlineImg")
-      changeImg("popup_details", "popupImg")
     }
+    updateImgAndSlide()
   }
 
-  function changeImg(name, elemId) {
-    let imgElem = document.getElementById(elemId)
-    const src = new URL(imgElem.src)
-    src.pathname = `/images/${name}.png`
-    imgElem.src = src
+  function addLogoUrl(event) {
+    if (sessionStorage.getItem("logoUrl") === "true") {
+      sessionStorage.setItem("logoUrl", "false")
+    } else {
+      sessionStorage.setItem("logoUrl", "true")
+    }
+    updateImgAndSlide()
   }
+
+
+  function updateImgAndSlide() {
+    const hideDetails = sessionStorage.getItem("hideDetails") === 'true'
+    const logoUrl = sessionStorage.getItem("logoUrl") === 'true'
+
+    let inlineImg = document.getElementById('inlineImg')
+    let popupImg = document.getElementById('popupImg')
+
+    const inlineSrc = new URL(inlineImg.src)
+    const popupSrc = new URL(popupImg.src)
+
+    document.getElementById('detailsCheckbox').checked = hideDetails
+    document.getElementById('logoCheckbox').checked = logoUrl
+    
+    let imageName = ""
+
+    if (hideDetails) {
+      imageName += '_details'
+    }
+    if (logoUrl) {
+      imageName += '_logo'
+    }
+    imageName += '.png'
+
+    inlineImg.src = `/images/inline${imageName}`
+    popupImg.src = `/images/popup${imageName}`
+  }
+
 </script>
 <style>
   * {
@@ -91,8 +128,7 @@
   .options {
     display: flex;
     flex-direction: row;
-    width: 100%;
-    justify-content: space-between;
+    justify-content: space-evenly;
     border: 0.5px solid #dadada;
     padding: 20px 20px;
   }
