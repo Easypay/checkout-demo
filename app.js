@@ -10,7 +10,7 @@ const port = 3000
 // TODO: remove after inclusion from CDN
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
-app.get('/checkoutmanifest', createCheckoutSession)
+app.get('/checkoutmanifest/:type', createCheckoutSession)
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'))
@@ -40,18 +40,30 @@ function createCheckoutSession(req, res) {
   const tomorrow = new Date()
   tomorrow.setDate(tomorrow.getDate() + 1)
   const host = 'api.test.easypay.pt'
-  const payload = JSON.stringify({
-    type: ['single'],
-    payment: {
-      methods: ['cc', 'mb', 'mbw', 'dd', 'vi', 'uf', 'sc'],
-      type: 'sale',
-      capture: {
-        transaction_key: 'string',
-        descriptive: 'Descriptive Example',
-      },
-      currency: 'EUR',
-      expiration_time: tomorrow.toISOString().slice(0, 16).replace('T', ' '), // e.g. 2022-01-02 18:25
+
+  console.log("payment type: ", req.params.type)
+
+  let payment = {
+    methods: ['cc', 'mb', 'mbw', 'dd', 'vi', 'uf', 'sc'],
+    type: 'sale',
+    capture: {
+      transaction_key: 'string',
+      descriptive: 'Descriptive Example',
     },
+    currency: 'EUR',
+    expiration_time: tomorrow.toISOString().slice(0, 16).replace('T', ' '),
+  }
+
+  if (req.params.type === 'subscription') {
+    const today = new Date()
+    today.setDate(today.getHours() + 1)
+    payment.start_time = today.toISOString().slice(0, 16).replace('T', ' ')
+    payment.frequency = '1W'
+  }
+
+  const payload = JSON.stringify({
+    type: [req.params.type],
+    payment: payment,
     order: {
       value: 302,
       key: 'order-key',
@@ -81,6 +93,7 @@ function createCheckoutSession(req, res) {
       language: 'PT',
     },
   })
+
   const options = {
     hostname: host,
     path: '/2.0/checkout',
@@ -92,6 +105,7 @@ function createCheckoutSession(req, res) {
       ApiKey: apiKey,
     },
   }
+
   var httpreq = https.request(options, function (response) {
     let manifest = ''
     response.on('data', function (chunk) {
@@ -102,6 +116,7 @@ function createCheckoutSession(req, res) {
       res.send(manifest)
     })
   })
+
   httpreq.write(payload)
   httpreq.end()
 }

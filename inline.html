@@ -68,7 +68,10 @@
             }
           }
         }
-        const url = '/checkoutmanifest'
+        const url =
+          sessionStorage.getItem('subscription') === 'true'
+            ? '/checkoutmanifest/subscription'
+            : '/checkoutmanifest/single'
         req.open('GET', url)
         req.send()
       }
