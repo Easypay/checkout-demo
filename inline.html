@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
     <title>easypay Checkout Demo</title>
     <!-- include from CDN -->
-    <script src="https://cdn.easypay.pt/checkout/2.0.0/"></script>
+    <script src="https://cdn.easypay.pt/checkout/2.2.0/"></script>
   </head>
   <body>
     <div id="easypay-checkout"></div>
@@ -13,7 +13,7 @@
       let manifest
 
       /** The code we want to run when Checkout finishes successfully. */
-      function onCheckoutSuccess(successInfo) {
+      function onCheckoutClose() {
         checkoutInstance.unmount()
         document.write('Your order was received. Thank you.')
       }
@@ -38,11 +38,11 @@
 
       /**
        * Call the Checkout SDK with manifest and options.
-       * In this case, we are using the default id 'easypay-checkout' and passing an 'onSuccess' handler.
+       * In this case, we are using the default id 'easypay-checkout' and passing an 'onClose' handler.
        */
       function initEasypayCheckoutSDK(manifest) {
         checkoutInstance = easypayCheckout.startCheckout(manifest, {
-          onSuccess: onCheckoutSuccess,
+          onClose: onCheckoutClose,
           onError: onCheckoutError,
           language: 'en',
           hideDetails: sessionStorage.getItem('hideDetails') === 'true' ? true : false,
