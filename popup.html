@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
     <title>easypay Checkout Demo</title>
     <!-- include from CDN -->
-    <script src="https://cdn.easypay.pt/checkout/2.0.0/"></script>
+    <script src="https://cdn.easypay.pt/checkout/2.2.0/"></script>
   </head>
   <body>
     <button id="easypay-checkout">Open Popup</button>
@@ -11,11 +11,12 @@
       /** Used to store the checkout instance and later unmount it. */
       let checkoutInstance
       let manifest
+      let successfulPaymentInteraction = false
 
       /** The code we want to run when Checkout finishes successfully. */
       function onCheckoutSuccess(successInfo) {
-        checkoutInstance.unmount()
-        document.write('Your order was received. Thank you.')
+        successfulPaymentInteraction = true
+        alert('Checkout success.')
       }
 
       /** The code we want to run on Checkout errors. */
@@ -38,7 +39,10 @@
 
       /** The code we want to run on Checkout Close. */
       function onCheckoutClose() {
-        checkoutInstance.unmount()
+        if (successfulPaymentInteraction) {
+          checkoutInstance.unmount()
+          document.write('Your order was received. Thank you.')
+        }
         alert('Popup closed.')
       }
 
