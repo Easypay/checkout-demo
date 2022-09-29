@@ -51,15 +51,33 @@
        * In this case, we are using the default id 'easypay-checkout', we are passing a 'display' option to enable 'popup' mode and our event handlers.
        */
       function initEasypayCheckoutSDK(manifest) {
-        checkoutInstance = easypayCheckout.startCheckout(manifest, {
+        let config = {
           onSuccess: onCheckoutSuccess,
           onError: onCheckoutError,
           onClose: onCheckoutClose,
-          hideDetails: sessionStorage.getItem('hideDetails') === 'true' ? true : false,
-          logoUrl: sessionStorage.getItem("logoUrl") === 'true' ? 'https://easypay-cdn-delivery.s3.eu-central-1.amazonaws.com/emails/easypay_logo.svg' : '',
+          language: 'en',
+          logoUrl:
+            sessionStorage.getItem('logoUrl') === 'true'
+              ? 'https://easypay-cdn-delivery.s3.eu-central-1.amazonaws.com/emails/easypay_logo.svg'
+              : '',
+          testing: true,
           display: 'popup',
-          testing: true
-        })
+        }
+
+        for (const key of Object.keys(sessionStorage)) {
+          const item = sessionStorage.getItem(key)
+          if (item === 'true' || item === 'false') {
+            if (key !== 'logoUrl') {
+              config[key] = item === 'true'
+            }
+          } else if (['inputBorderRadius', 'buttonBorderRadius', 'baseFontSize'].includes(key)) {
+            config[key] = parseInt(item)
+          } else {
+            config[key] = item
+          }
+        }
+
+        checkoutInstance = easypayCheckout.startCheckout(manifest, config)
       }
 
       /**

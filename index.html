@@ -5,6 +5,7 @@
     <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Overpass" />
   </head>
+
   <body>
     <h1>easypay Checkout SDK Demo</h1>
     <div class="options">
@@ -12,94 +13,211 @@
         <h3>Payment Type:</h3>
         <div class="option">
           <label for="switch">Subscription</label>
-          <div id="switch" class="switch" onclick="setSubscription()">
+          <div id="switch" class="switch" onclick="toggleOption('subscription')">
             <input type="checkbox" id="subscription" />
             <span class="slider round"></span>
           </div>
         </div>
       </div>
+
+      <hr />
+
       <div class="section">
+        <!-- Configurations -->
         <h3>Configuration:</h3>
         <div class="option">
           <label for="switch">Hide details</label>
-          <div id="switch" class="switch" onclick="hideDetails()">
-            <input type="checkbox" id="detailsCheckbox" />
+          <div id="switch" class="switch" onclick="toggleHideDetails()">
+            <input type="checkbox" id="hideDetails" />
             <span class="slider round"></span>
           </div>
         </div>
         <div class="option">
           <label for="switch">Logo URL</label>
-          <div id="switch" class="switch" onclick="addLogoUrl()">
-            <input type="checkbox" id="logoCheckbox" />
+          <div id="switch" class="switch" onclick="toggleAddLogoUrl()">
+            <input type="checkbox" id="logoUrl" />
             <span class="slider round"></span>
+          </div>
+        </div>
+        <hr class="config-divider" />
+        <!-- Advanced config -->
+
+        <div id="switch" class="switch advanced">
+          <input type="checkbox" id="advanced" autocomplete="off" />
+          <span class="slider round"></span>
+        </div>
+        <button class="accordion" onclick="toggleAccordion(this)">Advanced</button>
+        <div class="grid">
+          <div class="option">
+            <label for="switch">Input floating label</label>
+            <div id="switch" class="switch" onclick="toggleOption('inputFloatingLabel')">
+              <input type="checkbox" id="inputFloatingLabel" checked="true" />
+              <span class="slider round"></span>
+            </div>
+          </div>
+          <div class="option">
+            <label for="switch">Button box shadow</label>
+            <div id="switch" class="switch" onclick="toggleOption('buttonBoxShadow')">
+              <input type="checkbox" id="buttonBoxShadow" checked="true" />
+              <span class="slider round"></span>
+            </div>
+          </div>
+          <div class="option">
+            <label for="inputBorderRadius">Input border radius</label>
+            <input type="number" id="inputBorderRadius" />
+          </div>
+          <div class="option">
+            <label for="buttonBorderRadius">Button border radius</label>
+            <input type="number" id="buttonBorderRadius" />
+          </div>
+          <div class="option">
+            <label for="baseFontSize">Base font size</label>
+            <input type="number" id="baseFontSize" />
+          </div>
+          <div class="option">
+            <label for="backgroundColor">Background color</label>
+            <input type="color" id="backgroundColor" />
+          </div>
+          <div class="option">
+            <label for="accentColor">Accent color</label>
+            <input type="color" id="accentColor" />
+          </div>
+          <div class="option">
+            <label for="errorColor">Error color</label>
+            <input type="color" id="errorColor" />
+          </div>
+          <div class="option">
+            <label for="inputBackgroundColor">Input background color</label>
+            <input type="color" id="inputBackgroundColor" />
+          </div>
+          <div class="option">
+            <label for="inputBorderColor">Input border color</label>
+            <input type="color" id="inputBorderColor" />
+          </div>
+          <div class="option">
+            <label for="buttonBackgroundColor">Button background color</label>
+            <input type="color" id="buttonBackgroundColor" />
           </div>
         </div>
       </div>
     </div>
+
     <div class="container">
       <div class="container-box">
         <h3>Inline Checkout Demo:</h3>
-        <a href="inline"><img id="inlineImg" src="images/inline.png" height="400" /></a>
+        <a href="inline" onclick="submitConfig()"
+          ><img id="inlineImg" src="images/inline.png" height="400"
+        /></a>
         <br />
-        <div class="links"><a href="inline">Inline &rarr;</a></div>
+        <div class="links">
+          <a href="inline" onclick="submitConfig()">Inline &rarr;</a>
+        </div>
       </div>
       <hr />
       <div class="container-box">
         <h3>Popup Checkout Demo:</h3>
-        <a href="popup"><img id="popupImg" src="images/popup.png" height="400" /></a>
+        <a href="popup" onclick="submitConfig()"
+          ><img id="popupImg" src="images/popup.png" height="400"
+        /></a>
         <br />
-        <div class="links"><a href="popup">Popup &rarr;</a></div>
+        <div class="links"><a href="popup" onclick="submitConfig()">Popup &rarr;</a></div>
       </div>
     </div>
   </body>
 </html>
 <script>
-  (function () {
-    updateImgAndSlide()
-    const subscription = sessionStorage.getItem('subscription') === 'true'
-    document.getElementById('subscription').checked = subscription
+  ;(function () {
+    updateImgAndSlide(
+      sessionStorage.getItem('hideDetails') === 'true',
+      sessionStorage.getItem('logoUrl') === 'true'
+    )
+    updateConfig()
   })()
 
-  function hideDetails() {
-    if (sessionStorage.getItem('hideDetails') === 'true') {
-      sessionStorage.setItem('hideDetails', 'false')
-    } else {
-      sessionStorage.setItem('hideDetails', 'true')
-    }
-    updateImgAndSlide()
+  function toggleAccordion(elem) {
+    elem.classList.toggle('active')
+    toggleOption('advanced')
   }
 
-  function addLogoUrl() {
-    if (sessionStorage.getItem('logoUrl') === 'true') {
-      sessionStorage.setItem('logoUrl', 'false')
-    } else {
-      sessionStorage.setItem('logoUrl', 'true')
-    }
-    updateImgAndSlide()
+  function submitConfig() {
+    const paymentType = document.getElementById('subscription')
+    const hideDetails = document.getElementById('hideDetails')
+    const logoUrl = document.getElementById('logoUrl')
+    const advancedOptions = document.querySelectorAll('.grid input')
+
+    sessionStorage.setItem(paymentType.id, paymentType.checked ? 'true' : 'false')
+    sessionStorage.setItem(hideDetails.id, hideDetails.checked ? 'true' : 'false')
+    sessionStorage.setItem(logoUrl.id, logoUrl.checked ? 'true' : 'false')
+
+    advancedOptions.forEach((element) => {
+      if (document.getElementById('advanced').checked) {
+        if (element.value !== '') {
+          if (['buttonBoxShadow', 'inputFloatingLabel'].includes(element.id)) {
+            sessionStorage.setItem(element.id, element.checked ? 'true' : 'false')
+          } else {
+            sessionStorage.setItem(element.id, element.value)
+          }
+        }
+      } else {
+        sessionStorage.removeItem(element.id)
+      }
+    })
   }
 
-  function setSubscription() {
-    const subscription = sessionStorage.getItem('subscription') === 'true'
-    if (subscription) {
-      sessionStorage.setItem('subscription', 'false')
-    } else {
-      sessionStorage.setItem('subscription', 'true')
+  function updateConfig() {
+    const configItems = [
+      'subscription',
+      'inputFloatingLabel',
+      'buttonBoxShadow',
+      'inputBorderRadius',
+      'buttonBorderRadius',
+      'baseFontSize',
+      'backgroundColor',
+      'accentColor',
+      'errorColor',
+      'inputBackgroundColor',
+      'buttonBackgroundColor',
+      'inputBorderColor',
+    ]
+
+    for (const item of configItems) {
+      if (sessionStorage.getItem(item)) {
+        if (['subscription', 'inputFloatingLabel', 'buttonBoxShadow'].includes(item)) {
+          document.getElementById(item).checked = sessionStorage.getItem(item) === 'true'
+        } else {
+          document.getElementById(item).value = sessionStorage.getItem(item)
+        }
+      }
     }
-    document.getElementById('subscription').checked = !subscription
   }
 
-  function updateImgAndSlide() {
-    const hideDetails = sessionStorage.getItem('hideDetails') === 'true'
-    const logoUrl = sessionStorage.getItem('logoUrl') === 'true'
+  function toggleOption(id) {
+    document.getElementById(id).checked = !document.getElementById(id).checked
+  }
 
+  function toggleHideDetails() {
+    updateImgAndSlide(
+      !document.getElementById('hideDetails').checked,
+      document.getElementById('logoUrl').checked
+    )
+  }
+
+  function toggleAddLogoUrl() {
+    updateImgAndSlide(
+      document.getElementById('hideDetails').checked,
+      !document.getElementById('logoUrl').checked
+    )
+  }
+
+  function updateImgAndSlide(hideDetails, logoUrl) {
     let inlineImg = document.getElementById('inlineImg')
     let popupImg = document.getElementById('popupImg')
 
     const inlineSrc = new URL(inlineImg.src)
     const popupSrc = new URL(popupImg.src)
 
-    document.getElementById('detailsCheckbox').checked = hideDetails
-    document.getElementById('logoCheckbox').checked = logoUrl
+    document.getElementById('hideDetails').checked = hideDetails
+    document.getElementById('logoUrl').checked = logoUrl
 
     let imageName = ''
 
@@ -114,7 +232,6 @@
     inlineImg.src = `/images/inline${imageName}`
     popupImg.src = `/images/popup${imageName}`
   }
-
 </script>
 <style>
   * {
@@ -134,8 +251,10 @@
     width: 100%;
     justify-content: space-between;
     border: 0.5px solid #dadada;
+    margin-top: 20px;
   }
   .container-box {
+    width: inherit;
     flex-grow: 2;
     text-align: center;
   }
@@ -151,24 +270,32 @@
   }
   .options {
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
     border: 0.5px solid #dadada;
-    padding: 20px 20px;
-  }
-  .section {
-    width: 200px;
+    flex-direction: row;
+    justify-content: space-around;
   }
   .option {
     display: inline-flex;
     justify-content: space-between;
     width: 100%;
+    padding: 10px 0;
+    align-items: center;
   }
   .option:not(:first-of-type) {
-    margin-top: 10px;
+    border-top: 1px dashed #ccc;
   }
   .option > * {
     vertical-align: middle;
+  }
+  .section {
+    width: 100%;
+    padding: 0 20px;
+  }
+  .grid {
+    display: inline-flex;
+    font-size: 14px;
+    padding: 0 10px;
+    background-color: #eee;
   }
   .switch {
     position: relative;
@@ -180,6 +307,12 @@
     opacity: 0;
     width: 0;
     height: 0;
+  }
+  .switch.advanced {
+    position: absolute;
+    right: 30px;
+    margin: 4px 8.5px;
+    pointer-events: none;
   }
   .slider {
     position: absolute;
@@ -194,7 +327,7 @@
   }
   .slider:before {
     position: absolute;
-    content: "";
+    content: '';
     height: 16px;
     width: 16px;
     left: 2px;
@@ -214,10 +347,56 @@
     -ms-transform: translateX(20px);
     transform: translateX(20px);
   }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    width: 40px;
+    -moz-appearance: textfield;
+  }
   .slider.round {
     border-radius: 34px;
   }
   .slider.round:before {
     border-radius: 50%;
+  }
+  .accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    padding: 5px 10px;
+  }
+  .accordion:not(.active) {
+    margin-bottom: 10px;
+  }
+  .accordion.active {
+    margin-bottom: 0;
+  }
+  .accordion.active + .grid {
+    display: block;
+    margin-bottom: 10px;
+  }
+  .accordion:not(.active) + .grid {
+    display: none;
+    margin-bottom: 0;
+  }
+  .active {
+    background-color: #ccc;
+  }
+  .accordion:after {
+    font-size: 14px;
+    color: #777;
+    float: right;
+    margin-right: 10px;
+  }
+  .config-divider {
+    border: 1px solid #0d71f9;
   }
 </style>

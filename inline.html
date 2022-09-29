@@ -41,14 +41,31 @@
        * In this case, we are using the default id 'easypay-checkout' and passing an 'onClose' handler.
        */
       function initEasypayCheckoutSDK(manifest) {
-        checkoutInstance = easypayCheckout.startCheckout(manifest, {
+        let config = {
           onClose: onCheckoutClose,
           onError: onCheckoutError,
           language: 'en',
-          hideDetails: sessionStorage.getItem('hideDetails') === 'true' ? true : false,
-          logoUrl: sessionStorage.getItem("logoUrl") === 'true' ? 'https://easypay-cdn-delivery.s3.eu-central-1.amazonaws.com/emails/easypay_logo.svg' : '',
-          testing: true
-        })
+          logoUrl:
+            sessionStorage.getItem('logoUrl') === 'true'
+              ? 'https://easypay-cdn-delivery.s3.eu-central-1.amazonaws.com/emails/easypay_logo.svg'
+              : '',
+          testing: true,
+        }
+
+        for (const key of Object.keys(sessionStorage)) {
+          const item = sessionStorage.getItem(key)
+          if (item === 'true' || item === 'false') {
+            if (key !== 'logoUrl') {
+              config[key] = item === 'true'
+            }
+          } else if (['inputBorderRadius', 'buttonBorderRadius', 'baseFontSize'].includes(key)) {
+            config[key] = parseInt(item)
+          } else {
+            config[key] = item
+          }
+        }
+
+        checkoutInstance = easypayCheckout.startCheckout(manifest, config)
       }
 
       /**
