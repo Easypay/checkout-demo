@@ -2,8 +2,13 @@
   <head>
     <meta charset="utf-8" />
     <title>easypay Checkout Demo</title>
-    <!-- include from CDN -->
-    <script src="https://cdn.easypay.pt/checkout/2.3.0/"></script>
+    <!--
+      NOTE: Integrators would typically include from easypay's CDN:
+      <script src="https://cdn.easypay.pt/checkout/X.Y.Z/"></script>
+    -->  
+    <script src="sdk"></script>
+    <!-- Common code used in this demo -->
+    <script src="files/common.js"></script>
   </head>
   <body>
     <div id="easypay-checkout"></div>
@@ -93,7 +98,7 @@
         req.send()
       }
 
-      getCheckoutManifest()
+      getIframeUrl(getCheckoutManifest)
     </script>
   </body>
 </html>

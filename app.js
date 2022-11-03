@@ -1,5 +1,4 @@
 const express = require('express')
-const fs = require('fs')
 const https = require('https')
 const path = require('path')
 require('dotenv').config()
@@ -10,10 +9,38 @@ const port = 3000
 // TODO: remove after inclusion from CDN
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
+app.use('/files', express.static(path.join(__dirname, 'files')))
+
 app.get('/checkoutmanifest/:type', createCheckoutSession)
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'))
+})
+
+app.get('/sdk', (req, res) => {
+  const sdkVersion = '2.4.0'
+  if (!process.env.SDK_URL) {
+    // Include from production CDN
+    res.redirect(`https://cdn.easypay.pt/checkout/${sdkVersion}/`)
+    return
+  }
+  if (process.env.SDK_URL.startsWith('http')) {
+    // Include from a different URL (other testing environments)
+    try {
+      const _url = new URL(process.env.SDK_URL)
+    } catch (e) {
+      res.status(500).send('SDK_URL is not a valid URL.')
+      return
+    }
+    res.redirect(new URL(`${sdkVersion}/`, process.env.SDK_URL))
+  } else {
+    // Return file from disk (to debug local version)
+    res.sendFile(process.env.SDK_URL)
+  }
+})
+
+app.get('/iframeUrl', (req, res) => {
+  res.send(process.env.IFRAME_URL || '')
 })
 
 app.get('/popup', (req, res) => {
