@@ -98,6 +98,19 @@
             <label for="buttonBackgroundColor">Button background color</label>
             <input type="color" id="buttonBackgroundColor" />
           </div>
+          <div class="option">
+            <label for="fontFamily">Font</label>
+            <select name="fontFamily" id="fontFamily">
+              <option value="">Overpass</option>
+              <option value="Cursive">Cursive</option>
+              <option value="Courier New">Courier New</option>
+              <option
+                value="https://fonts.gstatic.com/s/akayakanadaka/v16/N0bM2S5CPO5oOQqvazoRRb-8-MfWQZRjBjSE.woff2"
+              >
+                Akaya Kanadaka
+              </option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
@@ -143,7 +156,9 @@
     const paymentType = document.getElementById('subscription')
     const hideDetails = document.getElementById('hideDetails')
     const logoUrl = document.getElementById('logoUrl')
-    const advancedOptions = document.querySelectorAll('.grid input')
+    const fontFamily = document.getElementById('fontFamily')
+    let advancedOptions = Array.from(document.querySelectorAll('.grid input'))
+    advancedOptions.push(fontFamily)
 
     sessionStorage.setItem(paymentType.id, paymentType.checked ? 'true' : 'false')
     sessionStorage.setItem(hideDetails.id, hideDetails.checked ? 'true' : 'false')
@@ -178,6 +193,7 @@
       'inputBackgroundColor',
       'buttonBackgroundColor',
       'inputBorderColor',
+      'fontFamily',
     ]
 
     for (const item of configItems) {
