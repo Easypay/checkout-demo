@@ -83,7 +83,7 @@ function createCheckoutSession(req, res) {
 
   if (req.params.type === 'subscription') {
     const today = new Date()
-    today.setDate(today.getHours() + 1)
+    today.setHours(today.getHours() + 1)
     payment.start_time = today.toISOString().slice(0, 16).replace('T', ' ')
     payment.frequency = '1W'
   }
