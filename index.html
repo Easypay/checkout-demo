@@ -12,11 +12,16 @@
       <div class="section">
         <h3>Payment Type:</h3>
         <div class="option">
-          <label for="switch">Subscription</label>
-          <div id="switch" class="switch" onclick="toggleOption('subscription')">
-            <input type="checkbox" id="subscription" />
-            <span class="slider round"></span>
-          </div>
+          <label for="radioSingle">Single</label>
+          <input type="radio" id="single" name="payment" value="single" checked />
+        </div>
+        <div class="option">
+          <label for="radioFrequent">Frequent</label>
+          <input type="radio" id="frequent" name="payment" value="frequent" />
+        </div>
+        <div class="option">
+          <label for="radioSubscription">Subscription</label>
+          <input type="radio" id="subscription" name="payment" value="subscription" />
         </div>
       </div>
 
@@ -152,15 +157,24 @@
     toggleOption('advanced')
   }
 
+  function setPaymentType() {
+    const typeIds = ['single', 'frequent', 'subscription']
+    for (let index = 0; index < typeIds.length; index++) {
+      const id = typeIds[index]
+      if (document.getElementById(id).checked) {
+        sessionStorage.setItem('paymentType', id)
+      }
+    }
+  }
+
   function submitConfig() {
-    const paymentType = document.getElementById('subscription')
     const hideDetails = document.getElementById('hideDetails')
     const logoUrl = document.getElementById('logoUrl')
     const fontFamily = document.getElementById('fontFamily')
     let advancedOptions = Array.from(document.querySelectorAll('.grid input'))
     advancedOptions.push(fontFamily)
 
-    sessionStorage.setItem(paymentType.id, paymentType.checked ? 'true' : 'false')
+    setPaymentType()
     sessionStorage.setItem(hideDetails.id, hideDetails.checked ? 'true' : 'false')
     sessionStorage.setItem(logoUrl.id, logoUrl.checked ? 'true' : 'false')
 
@@ -181,7 +195,6 @@
 
   function updateConfig() {
     const configItems = [
-      'subscription',
       'inputFloatingLabel',
       'buttonBoxShadow',
       'inputBorderRadius',
@@ -198,7 +211,7 @@
 
     for (const item of configItems) {
       if (sessionStorage.getItem(item)) {
-        if (['subscription', 'inputFloatingLabel', 'buttonBoxShadow'].includes(item)) {
+        if (['inputFloatingLabel', 'buttonBoxShadow'].includes(item)) {
           document.getElementById(item).checked = sessionStorage.getItem(item) === 'true'
         } else {
           document.getElementById(item).value = sessionStorage.getItem(item)

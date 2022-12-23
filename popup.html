@@ -5,7 +5,7 @@
     <!--
       NOTE: Integrators would typically include from easypay's CDN:
       <script src="https://cdn.easypay.pt/checkout/X.Y.Z/"></script>
-    -->  
+    -->
     <script src="sdk"></script>
     <!-- Common code used in this demo -->
     <script src="files/common.js"></script>
@@ -103,9 +103,11 @@
           }
         }
         const url =
-          sessionStorage.getItem('subscription') === 'true'
-            ? '/checkoutmanifest/subscription'
-            : '/checkoutmanifest/single'
+          sessionStorage.getItem('subscription') !== 'true'
+            ? sessionStorage.getItem('frequent') !== 'true'
+              ? '/checkoutmanifest/single'
+              : '/checkoutmanifest/frequent'
+            : '/checkoutmanifest/subscription'
         req.open('GET', url)
         req.send()
       }
