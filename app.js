@@ -66,9 +66,9 @@ function createCheckoutSession(req, res) {
   const apiKey = process.env.TEST_API_KEY
   const tomorrow = new Date()
   tomorrow.setDate(tomorrow.getDate() + 1)
-  const host = 'api.test.easypay.pt'
+  const host = process.env.API_URL
 
-  console.log("payment type: ", req.params.type)
+  console.log('payment type: ', req.params.type)
 
   let payment = {
     methods: ['cc', 'mb', 'mbw', 'dd', 'vi', 'uf', 'sc'],

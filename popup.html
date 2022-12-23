@@ -102,12 +102,7 @@
             }
           }
         }
-        const url =
-          sessionStorage.getItem('subscription') !== 'true'
-            ? sessionStorage.getItem('frequent') !== 'true'
-              ? '/checkoutmanifest/single'
-              : '/checkoutmanifest/frequent'
-            : '/checkoutmanifest/subscription'
+        const url = `/checkoutmanifest/${sessionStorage.getItem('paymentType')}`
         req.open('GET', url)
         req.send()
       }
