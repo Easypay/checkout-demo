@@ -97,20 +97,20 @@ function createCheckoutSession(req, res) {
     type: [req.params.type],
     payment: payment,
     order: {
-      value: 302,
+      value: 1,
       key: 'order-key',
       items: [
         {
           description: 'Item in cart',
           quantity: 1,
           key: 'product-1',
-          value: 150,
+          value: 0.5,
         },
         {
           description: 'Item 2 in cart',
           quantity: 1,
           key: 'product-2',
-          value: 152,
+          value: 0.5,
         },
       ],
     },
