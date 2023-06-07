@@ -93,13 +93,12 @@ function createCheckoutSession(req, res) {
     payment.methods = ['cc', 'dd']
   }
 
-  const payload = JSON.stringify({
-    type: [req.params.type],
-    payment: payment,
-    order: {
+  let order = {}
+  if (req.params.type === 'single' || req.params.type === 'subscription') {
+    order = {
       value: 1,
-      key: 'order-key',
-      items: [
+          key: 'order-key',
+          items: [
         {
           description: 'Item in cart',
           quantity: 1,
@@ -113,7 +112,13 @@ function createCheckoutSession(req, res) {
           value: 0.5,
         },
       ],
-    },
+    }
+  }
+
+  const payload = JSON.stringify({
+    type: [req.params.type],
+    payment: payment,
+    order: order,
     config: {},
     customer: {
       name: 'Customer Example',
