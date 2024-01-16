@@ -11,6 +11,8 @@ app.use('/images', express.static(path.join(__dirname, 'images')))
 
 app.use('/files', express.static(path.join(__dirname, 'files')))
 
+app.use('/.well-known', express.static(path.join(__dirname, '.well-known')))
+
 app.get('/checkoutmanifest/:type', createCheckoutSession)
 
 app.get('/', (req, res) => {
