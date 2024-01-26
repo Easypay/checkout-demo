@@ -9,6 +9,16 @@ const port = 3000
 // TODO: remove after inclusion from CDN
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
+app.use(
+  '/.well-known/apple-developer-merchantid-domain-association.txt',
+  express.static(
+    path.join(
+      __dirname,
+      `.well-known/apple-developer-merchantid-domain-association-${process.env.ENV}.txt`
+    )
+  )
+)
+
 app.use('/files', express.static(path.join(__dirname, 'files')))
 
 app.get('/checkoutmanifest/:type', createCheckoutSession)
@@ -81,7 +91,7 @@ function createCheckoutSession(req, res) {
     expiration_time: tomorrow.toISOString().slice(0, 16).replace('T', ' '),
   }
 
-  if (req.params.type === 'frequent'){
+  if (req.params.type === 'frequent') {
     payment.methods = ['cc', 'mb', 'mbw', 'dd', 'vi']
   }
 
