@@ -78,10 +78,8 @@ function createCheckoutSession(req, res) {
   tomorrow.setDate(tomorrow.getDate() + 1)
   const host = process.env.API_URL
 
-  console.log('payment type: ', req.params.type)
-
   let payment = {
-    methods: ['cc', 'mb', 'mbw', 'dd', 'vi', 'uf', 'sc'],
+    methods: ['cc', 'mb', 'mbw', 'dd', 'vi', 'uf', 'sc', 'ap'],
     type: 'sale',
     capture: {
       transaction_key: 'string',
