@@ -12,10 +12,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')))
 app.use(
   '/.well-known/apple-developer-merchantid-domain-association.txt',
   express.static(
-    path.join(
-      __dirname,
-      `.well-known/apple-developer-merchantid-domain-association-${process.env.ENV}.txt`
-    )
+    path.join(__dirname, `.well-known/apple-developer-merchantid-domain-association.txt`)
   )
 )
 
@@ -105,8 +102,8 @@ function createCheckoutSession(req, res) {
   if (req.params.type === 'single' || req.params.type === 'subscription') {
     order = {
       value: 1,
-          key: 'order-key',
-          items: [
+      key: 'order-key',
+      items: [
         {
           description: 'Item in cart',
           quantity: 1,
