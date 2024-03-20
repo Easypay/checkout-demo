@@ -77,7 +77,7 @@ function createCheckoutSession(req, res) {
 
   let payment = {
     methods: ['cc', 'mb', 'mbw', 'dd', 'vi', 'uf', 'sc', 'ap'],
-    type: 'authorisation',
+    type: 'sale',
     capture: {
       transaction_key: 'string',
       descriptive: 'Descriptive Example',
