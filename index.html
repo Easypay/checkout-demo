@@ -31,6 +31,13 @@
         <!-- Configurations -->
         <h3>Configuration:</h3>
         <div class="option">
+          <label for="operation">Sale / Authorisation</label>
+          <select id="operation" name="operation">
+            <option value="sale">Sale</option>
+            <option value="authorisation">Authorisation</option>
+          </select>
+        </div>
+        <div class="option">
           <label for="switch">Hide details</label>
           <div id="switch" class="switch" onclick="toggleHideDetails()">
             <input type="checkbox" id="hideDetails" />
@@ -168,6 +175,7 @@
   }
 
   function submitConfig() {
+    const operation = document.getElementById('operation')
     const hideDetails = document.getElementById('hideDetails')
     const logoUrl = document.getElementById('logoUrl')
     const fontFamily = document.getElementById('fontFamily')
@@ -175,6 +183,7 @@
     advancedOptions.push(fontFamily)
 
     setPaymentType()
+    sessionStorage.setItem(operation.id, operation.value)
     sessionStorage.setItem(hideDetails.id, hideDetails.checked ? 'true' : 'false')
     sessionStorage.setItem(logoUrl.id, logoUrl.checked ? 'true' : 'false')
 
