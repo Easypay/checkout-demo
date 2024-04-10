@@ -76,7 +76,7 @@ function createCheckoutSession(req, res) {
   const host = process.env.API_URL
 
   let payment = {
-    methods: ['cc', 'mb', 'mbw', 'dd', 'vi', 'uf', 'sc', 'ap'],
+    methods: ['cc', 'mb', 'mbw', 'dd', 'vi', 'uf', 'sc', 'ap', 'gp'],
     type: req.query.operation || 'sale',
     capture: {
       transaction_key: 'string',
