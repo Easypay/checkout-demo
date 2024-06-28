@@ -1,6 +1,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>easypay Checkout Demo</title>
     <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Overpass" />
@@ -436,5 +437,14 @@
   }
   .config-divider {
     border: 1px solid #0d71f9;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+    .option {
+      flex-wrap: wrap;
+    }
   }
 </style>
