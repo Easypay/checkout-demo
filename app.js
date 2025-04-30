@@ -1,4 +1,5 @@
 const express = require('express')
+const fs = require('fs')
 const https = require('https')
 const path = require('path')
 require('dotenv').config()
@@ -9,11 +10,21 @@ const port = 3000
 // TODO: remove after inclusion from CDN
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
-app.use(
-  '/.well-known/apple-developer-merchantid-domain-association.txt',
-  express.static(
-    path.join(__dirname, `.well-known/apple-developer-merchantid-domain-association.txt`)
-  )
+app.get(
+  '/.well-known/apple-developer-merchantid-domain-association',
+  (req, res) => {
+    let filePath = path.join(
+      __dirname,
+      `.well-known/${process.env.ENV}.apple-developer-merchantid-domain-association`
+    )
+    if (!fs.existsSync(filePath)) {
+      filePath = path.join(
+        __dirname,
+        '.well-known/production.apple-developer-merchantid-domain-association'
+      )
+    }
+    res.sendFile(filePath)
+  }
 )
 
 app.use('/files', express.static(path.join(__dirname, 'files')))
