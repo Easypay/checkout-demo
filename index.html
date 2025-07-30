@@ -4,7 +4,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>easypay Checkout Demo</title>
     <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Overpass" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Overpass"
+    />
   </head>
 
   <body>
@@ -13,16 +16,27 @@
       <div class="section">
         <h3>Payment Type:</h3>
         <div class="option">
-          <label for="radioSingle">Single</label>
-          <input type="radio" id="single" name="payment" value="single" checked />
+          <label for="single">Single</label>
+          <input
+            type="radio"
+            id="single"
+            name="payment"
+            value="single"
+            checked
+          />
         </div>
         <div class="option">
-          <label for="radioFrequent">Frequent</label>
+          <label for="frequent">Frequent</label>
           <input type="radio" id="frequent" name="payment" value="frequent" />
         </div>
         <div class="option">
-          <label for="radioSubscription">Subscription</label>
-          <input type="radio" id="subscription" name="payment" value="subscription" />
+          <label for="subscription">Subscription</label>
+          <input
+            type="radio"
+            id="subscription"
+            name="payment"
+            value="subscription"
+          />
         </div>
       </div>
 
@@ -39,15 +53,35 @@
           </select>
         </div>
         <div class="option">
-          <label for="switch">Hide details</label>
-          <div id="switch" class="switch" onclick="toggleHideDetails()">
+          <label for="hideDetails">Hide details</label>
+          <div class="switch" data-toggle="hideDetails">
             <input type="checkbox" id="hideDetails" />
+            <span class="slider round"></span>
+          </div>
+          <label for="hideDetailsButton">Hide details button</label>
+          <div class="switch" data-toggle="hideDetailsButton">
+            <input type="checkbox" id="hideDetailsButton" />
             <span class="slider round"></span>
           </div>
         </div>
         <div class="option">
-          <label for="switch">Logo URL</label>
-          <div id="switch" class="switch" onclick="toggleAddLogoUrl()">
+          <label for="hideCart">Hide cart</label>
+          <div class="switch" data-toggle="hideCart">
+            <input type="checkbox" id="hideCart" />
+            <span class="slider round"></span>
+          </div>
+        </div>
+        <div class="option">
+          <label for="hideSubscriptionSummary">Hide subscription summary</label>
+          <div class="switch" data-toggle="hideSubscriptionSummary">
+            <input type="checkbox" id="hideSubscriptionSummary" />
+            <span class="slider round"></span>
+          </div>
+        </div>
+
+        <div class="option">
+          <label for="logoUrl">Logo URL</label>
+          <div class="switch" data-toggle="logoUrl">
             <input type="checkbox" id="logoUrl" />
             <span class="slider round"></span>
           </div>
@@ -55,22 +89,22 @@
         <hr class="config-divider" />
         <!-- Advanced config -->
 
-        <div id="switch" class="switch advanced">
+        <div class="switch advanced">
           <input type="checkbox" id="advanced" autocomplete="off" />
           <span class="slider round"></span>
         </div>
-        <button class="accordion" onclick="toggleAccordion(this)">Advanced</button>
+        <button class="accordion" id="advancedToggle">Advanced</button>
         <div class="grid">
           <div class="option">
-            <label for="switch">Input floating label</label>
-            <div id="switch" class="switch" onclick="toggleOption('inputFloatingLabel')">
+            <label for="inputFloatingLabel">Input floating label</label>
+            <div class="switch" data-toggle="inputFloatingLabel">
               <input type="checkbox" id="inputFloatingLabel" checked="true" />
               <span class="slider round"></span>
             </div>
           </div>
           <div class="option">
-            <label for="switch">Button box shadow</label>
-            <div id="switch" class="switch" onclick="toggleOption('buttonBoxShadow')">
+            <label for="buttonBoxShadow">Button box shadow</label>
+            <div class="switch" data-toggle="buttonBoxShadow">
               <input type="checkbox" id="buttonBoxShadow" checked="true" />
               <span class="slider round"></span>
             </div>
@@ -112,6 +146,18 @@
             <input type="color" id="buttonBackgroundColor" />
           </div>
           <div class="option">
+            <label for="buttonTextColor">Button text color</label>
+            <input type="color" id="buttonTextColor" />
+          </div>
+          <div class="option">
+            <label for="stepperTextColor">Stepper text color</label>
+            <input type="color" id="stepperTextColor" />
+          </div>
+          <div class="option">
+            <label for="linkColor">Link color</label>
+            <input type="color" id="linkColor" />
+          </div>
+          <div class="option">
             <label for="fontFamily">Font</label>
             <select name="fontFamily" id="fontFamily">
               <option value="">Overpass</option>
@@ -131,82 +177,44 @@
     <div class="container">
       <div class="container-box">
         <h3>Inline Checkout Demo:</h3>
-        <a href="inline" onclick="submitConfig()"
-          ><img id="inlineImg" src="images/inline.png" height="400"
-        /></a>
+        <a href="inline" class="submit-config-link">
+          <img id="inlineImg" src="images/inline.png" height="400" />
+        </a>
         <br />
         <div class="links">
-          <a href="inline" onclick="submitConfig()">Inline &rarr;</a>
+          <a href="inline" class="submit-config-link">Inline &rarr;</a>
         </div>
       </div>
       <hr />
       <div class="container-box">
         <h3>Popup Checkout Demo:</h3>
-        <a href="popup" onclick="submitConfig()"
-          ><img id="popupImg" src="images/popup.png" height="400"
-        /></a>
+        <a href="popup" class="submit-config-link">
+          <img id="popupImg" src="images/popup.png" height="400" />
+        </a>
         <br />
-        <div class="links"><a href="popup" onclick="submitConfig()">Popup &rarr;</a></div>
+        <div class="links">
+          <a href="popup" class="submit-config-link">Popup &rarr;</a>
+        </div>
       </div>
     </div>
   </body>
 </html>
 <script>
-  ;(function () {
-    updateImgAndSlide(
-      sessionStorage.getItem('hideDetails') === 'true',
-      sessionStorage.getItem('logoUrl') === 'true'
-    )
-    updateConfig()
-  })()
-
-  function toggleAccordion(elem) {
-    elem.classList.toggle('active')
-    toggleOption('advanced')
-  }
-
-  function setPaymentType() {
-    const typeIds = ['single', 'frequent', 'subscription']
-    for (let index = 0; index < typeIds.length; index++) {
-      const id = typeIds[index]
-      if (document.getElementById(id).checked) {
-        sessionStorage.setItem('paymentType', id)
-      }
-    }
-  }
-
-  function submitConfig() {
-    const operation = document.getElementById('operation')
-    const hideDetails = document.getElementById('hideDetails')
-    const logoUrl = document.getElementById('logoUrl')
-    const fontFamily = document.getElementById('fontFamily')
-    let advancedOptions = Array.from(document.querySelectorAll('.grid input'))
-    advancedOptions.push(fontFamily)
-
-    setPaymentType()
-    sessionStorage.setItem(operation.id, operation.value)
-    sessionStorage.setItem(hideDetails.id, hideDetails.checked ? 'true' : 'false')
-    sessionStorage.setItem(logoUrl.id, logoUrl.checked ? 'true' : 'false')
-
-    advancedOptions.forEach((element) => {
-      if (document.getElementById('advanced').checked) {
-        if (element.value !== '') {
-          if (['buttonBoxShadow', 'inputFloatingLabel'].includes(element.id)) {
-            sessionStorage.setItem(element.id, element.checked ? 'true' : 'false')
-          } else {
-            sessionStorage.setItem(element.id, element.value)
-          }
-        }
-      } else {
-        sessionStorage.removeItem(element.id)
-      }
-    })
-  }
-
-  function updateConfig() {
-    const configItems = [
+  // Cache state
+  const config = {
+    elements: {},
+    values: {},
+    checkboxes: [
+      'hideDetails',
+      'hideDetailsButton',
+      'hideCart',
+      'hideSubscriptionSummary',
+      'logoUrl',
+      'advanced',
       'inputFloatingLabel',
       'buttonBoxShadow',
+    ],
+    inputs: [
       'inputBorderRadius',
       'buttonBorderRadius',
       'baseFontSize',
@@ -214,62 +222,156 @@
       'accentColor',
       'errorColor',
       'inputBackgroundColor',
-      'buttonBackgroundColor',
       'inputBorderColor',
+      'buttonBackgroundColor',
+      'buttonTextColor',
+      'stepperTextColor',
+      'linkColor',
       'fontFamily',
-    ]
+      'operation',
+    ],
+  }
 
-    for (const item of configItems) {
-      if (sessionStorage.getItem(item)) {
-        if (['inputFloatingLabel', 'buttonBoxShadow'].includes(item)) {
-          document.getElementById(item).checked = sessionStorage.getItem(item) === 'true'
-        } else {
-          document.getElementById(item).value = sessionStorage.getItem(item)
-        }
+  ;(function () {
+    config.checkboxes.forEach(
+      (id) => (config.elements[id] = document.getElementById(id))
+    )
+    config.inputs.forEach(
+      (id) => (config.elements[id] = document.getElementById(id))
+    )
+
+    // Event listeners
+    document.querySelectorAll('.switch[data-toggle]').forEach((switchEl) => {
+      switchEl.addEventListener('click', () =>
+        toggleOption(switchEl.dataset.toggle)
+      )
+    })
+
+    document
+      .getElementById('advancedToggle')
+      .addEventListener('click', toggleAccordion)
+
+    document.querySelectorAll('.submit-config-link').forEach((link) => {
+      link.addEventListener('click', submitConfig)
+    })
+    //
+
+    loadFromStorage()
+    updateImgAndSlide()
+  })()
+
+  function loadFromStorage() {
+    config.checkboxes.forEach((id) => {
+      const value = sessionStorage.getItem(id) === 'true'
+      if (sessionStorage.getItem(id)) {
+        config.elements[id].checked = value
       }
-    }
+    })
+
+    config.inputs.forEach((id) => {
+      if (sessionStorage.getItem(id)) {
+        config.elements[id].value = sessionStorage.getItem(id)
+      }
+    })
+
+    storeCurrentValues()
+  }
+
+  function storeCurrentValues() {
+    config.inputs.forEach((id) => {
+      config.values[id] = config.elements[id].value
+    })
+    config.checkboxes.forEach((id) => {
+      config.values[id] = config.elements[id].checked
+    })
+  }
+
+  function toggleAccordion() {
+    this.classList.toggle('active')
+    toggleOption('advanced')
   }
 
   function toggleOption(id) {
-    document.getElementById(id).checked = !document.getElementById(id).checked
+    const element = config.elements[id]
+    element.checked = !element.checked
+
+    if (id === 'hideDetails' && !element.checked) {
+      config.elements.hideDetailsButton.checked = false
+    }
+
+    updateImgAndSlide()
   }
 
-  function toggleHideDetails() {
-    updateImgAndSlide(
-      !document.getElementById('hideDetails').checked,
-      document.getElementById('logoUrl').checked
-    )
+  function setPaymentType() {
+    ;['single', 'frequent', 'subscription'].forEach((id) => {
+      if (document.getElementById(id).checked) {
+        sessionStorage.setItem('paymentType', id)
+      }
+    })
   }
 
-  function toggleAddLogoUrl() {
-    updateImgAndSlide(
-      document.getElementById('hideDetails').checked,
-      !document.getElementById('logoUrl').checked
-    )
+  function submitConfig(e) {
+    e?.preventDefault()
+
+    setPaymentType()
+
+    config.checkboxes.forEach((id) => {
+      sessionStorage.setItem(id, config.elements[id].checked ? 'true' : 'false')
+    })
+
+    sessionStorage.setItem('operation', config.elements.operation.value)
+
+    if (config.elements.advanced.checked) {
+      config.inputs
+        .filter((id) => id !== 'operation')
+        .forEach((id) => {
+          const element = config.elements[id]
+          if (element.value !== '' && element.value !== config.values[id]) {
+            sessionStorage.setItem(id, element.value)
+          }
+        })
+    } else {
+      config.inputs
+        .filter((id) => id !== 'operation')
+        .forEach((id) => {
+          sessionStorage.removeItem(id)
+        })
+    }
+
+    storeCurrentValues()
+
+    if (e && e.currentTarget.href) {
+      window.location.href = e.currentTarget.href
+    }
   }
 
-  function updateImgAndSlide(hideDetails, logoUrl) {
-    let inlineImg = document.getElementById('inlineImg')
-    let popupImg = document.getElementById('popupImg')
+  function updateImgAndSlide() {
+    const hideDetails = config.elements.hideDetails.checked
+    const hideDetailsButton = config.elements.hideDetailsButton.checked
+    const hideCart = config.elements.hideCart.checked
+    const logoUrl = config.elements.logoUrl.checked
 
-    const inlineSrc = new URL(inlineImg.src)
-    const popupSrc = new URL(popupImg.src)
-
-    document.getElementById('hideDetails').checked = hideDetails
-    document.getElementById('logoUrl').checked = logoUrl
+    if (!hideDetails) {
+      config.elements.hideDetailsButton.checked = false
+    }
 
     let imageName = ''
-
     if (hideDetails) {
       imageName += '_details'
+      if (hideDetailsButton) {
+        imageName += '_button'
+      }
+    }
+    if (hideCart) {
+      imageName += '_cart'
     }
     if (logoUrl) {
       imageName += '_logo'
     }
     imageName += '.png'
 
-    inlineImg.src = `/images/inline${imageName}`
-    popupImg.src = `/images/popup${imageName}`
+    document.getElementById('inlineImg').src = `/images/inline${imageName}`
+    document.getElementById('popupImg').src = `/images/popup${imageName}`
   }
 </script>
 <style>
@@ -341,6 +443,7 @@
     display: inline-block;
     width: 40px;
     height: 20px;
+    cursor: pointer;
   }
   .switch input {
     opacity: 0;
@@ -361,7 +464,6 @@
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    -webkit-transition: 0.4s;
     transition: 0.4s;
   }
   .slider:before {
@@ -372,7 +474,6 @@
     left: 2px;
     bottom: 2px;
     background-color: white;
-    -webkit-transition: 0.4s;
     transition: 0.4s;
   }
   input:checked + .slider {
@@ -382,8 +483,6 @@
     box-shadow: 0 0 1px #0d71f9;
   }
   input:checked + .slider:before {
-    -webkit-transform: translateX(20px);
-    -ms-transform: translateX(20px);
     transform: translateX(20px);
   }
   input::-webkit-outer-spin-button,
