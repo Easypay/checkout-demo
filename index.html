@@ -65,9 +65,9 @@
           </div>
         </div>
         <div class="option">
-          <label for="hideCart">Hide cart</label>
-          <div class="switch" data-toggle="hideCart">
-            <input type="checkbox" id="hideCart" />
+          <label for="hideCartButton">Hide cart button</label>
+          <div class="switch" data-toggle="hideCartButton">
+            <input type="checkbox" id="hideCartButton" />
             <span class="slider round"></span>
           </div>
         </div>
@@ -207,7 +207,7 @@
     checkboxes: [
       'hideDetails',
       'hideDetailsButton',
-      'hideCart',
+      'hideCartButton',
       'hideSubscriptionSummary',
       'logoUrl',
       'advanced',
@@ -265,6 +265,11 @@
       const value = sessionStorage.getItem(id) === 'true'
       if (sessionStorage.getItem(id)) {
         config.elements[id].checked = value
+      }
+      if (id === 'advanced') {
+        document
+          .getElementById('advancedToggle')
+          .classList.toggle('active', value)
       }
     })
 
@@ -348,7 +353,7 @@
   function updateImgAndSlide() {
     const hideDetails = config.elements.hideDetails.checked
     const hideDetailsButton = config.elements.hideDetailsButton.checked
-    const hideCart = config.elements.hideCart.checked
+    const hideCartButton = config.elements.hideCartButton.checked
     const logoUrl = config.elements.logoUrl.checked
 
     if (!hideDetails) {
@@ -362,7 +367,7 @@
         imageName += '_button'
       }
     }
-    if (hideCart) {
+    if (hideCartButton) {
       imageName += '_cart'
     }
     if (logoUrl) {

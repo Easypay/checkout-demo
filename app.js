@@ -36,7 +36,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/sdk', (req, res) => {
-  const sdkVersion = '2.6.1'
+  const sdkVersion = process.env.SDK_VERSION || '2.8.0'
   if (!process.env.SDK_URL) {
     // Include from production CDN
     res.redirect(`https://cdn.easypay.pt/checkout/${sdkVersion}/`)
