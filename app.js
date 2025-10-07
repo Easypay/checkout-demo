@@ -97,16 +97,12 @@ function createCheckoutSession(req, res) {
     expiration_time: tomorrow.toISOString().slice(0, 16).replace('T', ' '),
   }
 
-  if (req.params.type === 'frequent') {
-    payment.methods = ['cc', 'mb', 'mbw', 'dd', 'vi']
-  }
-
   if (req.params.type === 'subscription') {
     const today = new Date()
     today.setHours(today.getHours() + 1)
     payment.start_time = today.toISOString().slice(0, 16).replace('T', ' ')
     payment.frequency = '1W'
-    payment.methods = ['cc', 'dd']
+    payment.methods = ['cc', 'dd', 'ap', 'gp', 'sw']
   }
 
   let order = {}
