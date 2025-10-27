@@ -1,0 +1,50 @@
+{
+  "header": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n",
+  "tagPrefix": "v",
+  "types": [
+    {
+      "type": "feat",
+      "section": "✨ New Features"
+    },
+    {
+      "type": "fix",
+      "section": "🐛 Bug Fixes"
+    },
+    {
+      "type": "docs",
+      "section": "📚 Documentation"
+    },
+    {
+      "type": "style",
+      "section": "💅 Style"
+    },
+    {
+      "type": "refactor",
+      "section": "🧹 Refactoring"
+    },
+    {
+      "type": "perf",
+      "section": "⚡️ Performance"
+    },
+    {
+      "type": "test",
+      "section": "✅ Tests"
+    },
+    {
+      "type": "ci",
+      "section": "🧰 CI / Build / Chore"
+    },
+    {
+      "type": "build",
+      "section": "🧰 CI / Build / Chore"
+    },
+    {
+      "type": "chore",
+      "section": "🧰 CI / Build / Chore"
+    }
+  ],
+  "skip": {
+    "commit": true,
+    "tag": true
+  }
+}
