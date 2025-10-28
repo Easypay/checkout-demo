@@ -1,0 +1,53 @@
+name: Label PRs
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure labels exist without overwriting
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const labels = [
+              { name: 'breaking-change', color: 'FA0000' },
+              { name: 'feat', color: '6DB84F' },
+              { name: 'fix', color: '750808' },
+              { name: 'docs', color: '42C5E3' },
+              { name: 'style', color: 'E663B8' },
+              { name: 'refactor', color: '390875' },
+              { name: 'perf', color: 'F0E407' },
+              { name: 'test', color: '07F0AE' },
+              { name: 'ci', color: '818282' },
+              { name: 'build', color: 'ED640E' },
+              { name: 'chore', color: '0711D9' },
+              { name: 'dependencies', color: '5B62E3' },
+              { name: 'other', color: 'B0C4DE' }
+            ];
+            const existingLabelsResp = await github.rest.issues.listLabelsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+            const existingLabels = existingLabelsResp.data.map(l => l.name);
+            for (const label of labels) {
+              if (!existingLabels.includes(label.name)) {
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name,
+                  color: label.color
+                });
+              }
+            }
+
+      - name: Assign labels
+        uses: bcoe/conventional-release-labels@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          type_labels: '{"breaking":"breaking-change","feat":"feat","fix":"fix","docs":"docs","style":"style","refactor":"refactor","perf":"perf","test":"test","ci":"ci","build":"build","chore":"chore","dependencies":"dependencies"}'
+          ignored_types: '["dependabot"]'

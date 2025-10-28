@@ -5,12 +5,26 @@
   "main": "app.js",
   "scripts": {
     "dev": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "commit": "cz",
+    "release": "standard-version"
   },
   "author": "easypay",
   "license": "ISC",
   "dependencies": {
     "dotenv": "16.0.1",
     "express": "4.18.1"
+  },
+  "devDependencies": {
+    "commitizen": "4.3.1",
+    "cz-conventional-changelog": "3.3.0",
+    "standard-version": "9.5.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog",
+      "disableScopeLowerCase": true,
+      "disableSubjectLowerCase": true
+    }
   }
 }
