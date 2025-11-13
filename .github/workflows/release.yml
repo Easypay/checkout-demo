@@ -1,0 +1,55 @@
+name: Create release
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+
+jobs:
+  release:
+    if: ${{ github.event.pull_request.merged == true }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+
+      - name: Extract version from package.json
+        id: version
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          TAG="v$VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Get latest tag
+        id: latest
+        run: |
+          git fetch --tags
+          LATEST_TAG=$(git tag --sort=-v:refname --merged | head -n1)
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+
+      - name: Check version is new
+        id: check_version
+        run: |
+          node -e "
+            const spawnSync = require('child_process').spawnSync;
+            const latest = '${{ steps.latest.outputs.latest_tag }}';
+            const pr = '${{ steps.version.outputs.tag }}';
+            const res =  spawnSync('npx', ['semver', pr, '-r', \`>\${latest}\`]);
+            const isNew = !latest || res.status === 0;
+            console.log(isNew ? '🎉 Version is newer, continuing release.' : '🚫 Version is not newer than latest tag. Skipping release.');
+            require('fs').writeFileSync(process.env.GITHUB_OUTPUT, 'new_version=' + isNew + '\n');
+          "
+
+      - name: Create tag
+        if: ${{ steps.check_version.outputs.new_version == 'true' }}
+        run: |
+          git tag "v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"
