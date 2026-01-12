@@ -61,7 +61,7 @@
           onSuccess: onCheckoutSuccess,
           onError: onCheckoutError,
           onClose: onCheckoutClose,
-          language: 'en',
+          language: sessionStorage.getItem('language') || 'en',
           logoUrl:
             sessionStorage.getItem('logoUrl') === 'true'
               ? 'https://easypay-cdn-delivery.s3.eu-central-1.amazonaws.com/emails/easypay_logo.svg'
