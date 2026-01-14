@@ -343,10 +343,11 @@
     })
 
     sessionStorage.setItem('operation', config.elements.operation.value)
+    sessionStorage.setItem('language', config.elements.language.value)
 
     if (config.elements.advanced.checked) {
       config.inputs
-        .filter((id) => id !== 'operation')
+        .filter((id) => !(['operation', 'language']).includes(id))
         .forEach((id) => {
           const element = config.elements[id]
           if (element.value !== '' && element.value !== config.values[id]) {
@@ -355,7 +356,7 @@
         })
     } else {
       config.inputs
-        .filter((id) => id !== 'operation')
+        .filter((id) => !(['operation', 'language']).includes(id))
         .forEach((id) => {
           sessionStorage.removeItem(id)
         })
