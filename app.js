@@ -15,16 +15,16 @@ app.get(
   (req, res) => {
     let filePath = path.join(
       __dirname,
-      `.well-known/${process.env.ENV}.apple-developer-merchantid-domain-association`
+      `.well-known/${process.env.ENV}.apple-developer-merchantid-domain-association`,
     )
     if (!fs.existsSync(filePath)) {
       filePath = path.join(
         __dirname,
-        '.well-known/production.apple-developer-merchantid-domain-association'
+        '.well-known/production.apple-developer-merchantid-domain-association',
       )
     }
     res.sendFile(filePath)
-  }
+  },
 )
 
 app.use('/files', express.static(path.join(__dirname, 'files')))
@@ -36,7 +36,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/sdk', (req, res) => {
-  const sdkVersion = process.env.SDK_VERSION || '2.8.0'
+  const sdkVersion = process.env.SDK_VERSION || '2.9.1'
   if (!process.env.SDK_URL) {
     // Include from production CDN
     res.redirect(`https://cdn.easypay.pt/checkout/${sdkVersion}/`)
